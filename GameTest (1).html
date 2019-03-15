@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+    <script src="p5.play.js"></script>
+
+</head>
+<body>
+    <script>
+        var player;
+        var background1;
+        var world;
+        var squareSize = { x: 20, y: 20 };
+        var squareTypes = ['grass', 'water', 'stone', 'earth'];
+        var colors = {
+            grass: () => fill(0, 255, 0),
+            water: () => fill(0, 0, 255),
+            stone: () => fill(128, 128, 128),
+            earth: () => fill(50, 50, 28)
+        };
+
+        var SCENE_W = 1200;
+        var SCENE_H = 600;
+        var maxX = 4000;
+        var maxY = 3000;
+        const countSquaresHorizontally = maxX / squareSize.x;
+        const countSquaresVertically = maxY / squareSize.y;
+
+        function setup() {
+            world = createWorld();
+            console.log(world);
+            createCanvas(600, 400)
+
+            player = createSprite(600, 300, 25, 50);
+            background1 = loadImage('https://i.ibb.co/D8VxYTL/art.png');
+        }
+
+        function createWorld() {
+            const count = countSquaresHorizontally * countSquaresVertically;
+            const world = [];
+            for (let i = 0; i < count; i++) {
+                const randomIndex = Math.floor(Math.random() * squareTypes.length);
+                const randomSquareType = squareTypes[randomIndex];
+                world.push(randomSquareType);
+            }
+            return world;
+        }
+
+        function draw() {
+            const cx = camera.position.x = player.position.x; // 300 => skermen går fra -300 til 300
+            const cy = camera.position.y = player.position.y; // 100 => skjermen går fra -100 til 300
+
+            const cameraSquareCol = cx / squareSize.x;
+            const cameraSquareRow = cy / squareSize.y;
+            const deltaCols = SCENE_W / (2 * squareSize.x);
+            const deltaRows = SCENE_H / (2 * squareSize.y);
+            background(0);
+
+            for (let squareCol = cameraSquareCol - deltaCols; squareCol < cameraSquareCol + deltaCols; squareCol++)
+                for (let squareRow = cameraSquareRow - deltaRows; squareRow < cameraSquareRow + deltaRows; squareRow++) {
+                    const x = squareCol * squareSize.x;
+                    const y = squareRow * squareSize.y;
+                    const squareIndex = countSquaresHorizontally * squareRow + squareCol;
+                    const squareType = world[squareIndex];
+                    const fillFunction = colors[squareType];
+                    fillFunction();
+                    rect(x, y, squareSize.x, squareSize.y);
+                    //image(background1, x, y);
+                }
+
+
+
+            drawSprite(player);
+
+            controls();
+            if (mouseIsPressed) {
+                camera.zoom = 0.5;
+            } else {
+                camera.zoom = 1;
+            }
+        }
+
+        function controls() {
+            if (keyIsDown(87) || keyIsDown(UP_ARROW)) {
+                player.position.y += -1;
+            } else if (keyIsDown(65) || keyIsDown(LEFT_ARROW)) {
+                player.position.x += -1;
+            } else if (keyIsDown(83) || keyIsDown(DOWN_ARROW)) {
+                player.position.y += +1;
+            } else if (keyIsDown(68) || keyIsDown(RIGHT_ARROW)) {
+                player.position.x += +1;
+            }
+        }
+    </script>
+</body>
+</html>
