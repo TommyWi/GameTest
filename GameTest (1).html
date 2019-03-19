@@ -13,13 +13,14 @@
         var player;
         var background1;
         var world;
-        var squareSize = { x: 20, y: 20 };
-        var squareTypes = ['grass', 'water', 'stone', 'earth'];
+        var squareSize = { x: 50, y: 50 };
+        var squareTypes = ['grass', 'water', 'stone', 'earth', 'default'];
         var colors = {
             grass: () => fill(0, 255, 0),
             water: () => fill(0, 0, 255),
             stone: () => fill(128, 128, 128),
-            earth: () => fill(50, 50, 28)
+            earth: () => fill(50, 50, 28),
+            default: () => fill(250, 250, 250)
         };
 
         var SCENE_W = 1200;
@@ -29,9 +30,11 @@
         const countSquaresHorizontally = maxX / squareSize.x;
         const countSquaresVertically = maxY / squareSize.y;
 
+        var squareType = null;
+
+
         function setup() {
             world = createWorld();
-            console.log(world);
             createCanvas(600, 400)
 
             player = createSprite(600, 300, 25, 50);
@@ -42,19 +45,28 @@
             const count = countSquaresHorizontally * countSquaresVertically;
             const world = [];
             for (let i = 0; i < count; i++) {
-                const randomIndex = Math.floor(Math.random() * squareTypes.length);
-                const randomSquareType = squareTypes[randomIndex];
-                world.push(randomSquareType);
+                let x = i % countSquaresHorizontally;
+                let y = Math.floor(i / countSquaresHorizontally);
+                //var myNoise = Math.floor(noise(x / 5, y / 5) * squareTypes.length);
+                const myNoise = noise(x / 5, y / 5);
+                const squareType =
+                    myNoise < 0.4 ? 'water' :
+                        myNoise < 0.5 ? 'earth' :
+                            myNoise < 0.9 ? 'grass' :
+                                'stone';
+                world.push(squareType);
             }
+
             return world;
         }
+
 
         function draw() {
             const cx = camera.position.x = player.position.x; // 300 => skermen går fra -300 til 300
             const cy = camera.position.y = player.position.y; // 100 => skjermen går fra -100 til 300
 
-            const cameraSquareCol = cx / squareSize.x;
-            const cameraSquareRow = cy / squareSize.y;
+            const cameraSquareCol = Math.floor(cx / squareSize.x);
+            const cameraSquareRow = Math.floor(cy / squareSize.y);
             const deltaCols = SCENE_W / (2 * squareSize.x);
             const deltaRows = SCENE_H / (2 * squareSize.y);
             background(0);
@@ -64,8 +76,8 @@
                     const x = squareCol * squareSize.x;
                     const y = squareRow * squareSize.y;
                     const squareIndex = countSquaresHorizontally * squareRow + squareCol;
-                    const squareType = world[squareIndex];
-                    const fillFunction = colors[squareType];
+                    squareType = world[squareIndex];
+                    const fillFunction = colors[squareType || 'default'];
                     fillFunction();
                     rect(x, y, squareSize.x, squareSize.y);
                     //image(background1, x, y);
