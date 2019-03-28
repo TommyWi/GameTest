@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.js"></script>
+    <script src="dna.js"></script>
+    <script src="rocket.js"></script>
+    <script src="population.js"></script>
+</head>
+<body>
+    <script>
+        let population;
+        const lifespan = 400;
+        let lifeP;
+        let count = 0;
+        let target;
+        const maxforce = 0.2;
+
+        let rx = 300;
+        let ry = 350;
+        let rw = 200;
+        let rh = 10;
+
+        function setup() {
+            createCanvas(800, 600);
+            rocket = new Rocket();
+            population = new Population();
+            lifeP = createP();
+            target = createVector(width / 2, 50);
+        }
+
+        function draw() {
+            background(0);
+            population.run();
+            lifeP.html(count);
+            count++;
+            if (count == lifespan) {
+                population.evaluate(); 
+                population.seletcion();
+                
+                count = 0;
+            }
+            fill(255);
+            rect(rx, ry, rw, rh);
+            ellipse(target.x, target.y, 16, 16);
+            
+        }
+
+        
+
+        
+
+
+
+        
+
+
+
+
+    </script>
+
+</body>
+</html>
