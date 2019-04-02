@@ -4,7 +4,7 @@ class Rocket {
         this.vel = createVector();
         this.acc = createVector();
         this.completed = false;
-        this.crashed = false
+        this.crashed = false;
         if (dna) {
             this.dna = dna;
         } else {
@@ -20,7 +20,7 @@ class Rocket {
     }
 
     calcFitness() {
-        let d = dist(this.pos.x, this.pos.y, target.x, target.y);
+        var d = dist(this.pos.x, this.pos.y, target.x, target.y);
         this.fitness = map(d, 0, width, width, 0);
         if (this.completed) {
             this.fitness * 10;
@@ -31,7 +31,7 @@ class Rocket {
     }
 
     update() {
-        let d = dist(this.pos.x, this.pos.y, target.x, target.y);
+        var d = dist(this.pos.x, this.pos.y, target.x, target.y);
 
         if (d < 10) {
             this.completed = true;

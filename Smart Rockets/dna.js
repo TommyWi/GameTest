@@ -4,7 +4,7 @@ class DNA {
             this.genes = genes;
         } else {
             this.genes = [];
-            for (let i = 0; i < lifespan; i++) {
+            for (var i = 0; i < lifespan; i++) {
                 this.genes[i] = p5.Vector.random2D();
                 this.genes[i].setMag(maxforce);
             }
@@ -13,9 +13,9 @@ class DNA {
 
     }
     crossover(partner) {
-        let newgenes = [];
-        let midpoint = floor(random(this.genes.length));
-        for (let i = 0; i < this.genes.length; i++) {
+        var newgenes = [];
+        var midpoint = floor(random(this.genes.length));
+        for (var i = 0; i < this.genes.length; i++) {
             if (i > midpoint) {
                 newgenes[i] = this.genes[i];
             } else {
@@ -26,7 +26,7 @@ class DNA {
         return new DNA(newgenes);
     }
     mutation() {
-        for (let i = 0; i < this.genes.length; i++) {
+        for (var i = 0; i < this.genes.length; i++) {
             if (random(1) < 0.01) {
                 this.genes[i] = p5.Vector.random2D();
                 this.genes[i].setMag(maxforce);

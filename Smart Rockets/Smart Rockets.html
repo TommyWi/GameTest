@@ -12,21 +12,20 @@
 </head>
 <body>
     <script>
-        let population;
-        const lifespan = 400;
-        let lifeP;
-        let count = 0;
-        let target;
-        const maxforce = 0.2;
+        var population;
+        var lifespan = 400;
+        var lifeP;
+        var count = 0;
+        var target;
+        var maxforce = 0.8;
 
-        let rx = 300;
-        let ry = 350;
-        let rw = 200;
-        let rh = 10;
+        var rx = 300;
+        var ry = 350;
+        var rw = 200;
+        var rh = 10;
 
         function setup() {
             createCanvas(800, 600);
-            rocket = new Rocket();
             population = new Population();
             lifeP = createP();
             target = createVector(width / 2, 50);
@@ -37,9 +36,9 @@
             population.run();
             lifeP.html(count);
             count++;
-            if (count == lifespan) {
+            if (count === lifespan) {
                 population.evaluate(); 
-                population.seletcion();
+                population.selection();
                 
                 count = 0;
             }
